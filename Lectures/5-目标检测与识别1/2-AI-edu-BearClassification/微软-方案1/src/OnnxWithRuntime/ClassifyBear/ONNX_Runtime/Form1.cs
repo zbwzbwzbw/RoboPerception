@@ -1,7 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-using Microsoft.ML.OnnxRuntime;
+﻿using Microsoft.ML.OnnxRuntime;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,22 +10,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ClassifyBear
+namespace ONNX_Runtime
 {
     public partial class Form1 : Form
     {
+        // 使用Netron查看模型，得到模型的输入应为224*224大小的图片
+        private const int imageSize = 224;
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        // 使用Netron查看模型，得到模型的输入应为224*224大小的图片
-        private const int imageSize = 224;
 
         private void button1_Click(object sender, EventArgs e)
         {
             // 识别之前先重置界面显示的内容
-            label1.Text = string.Empty;
+            label2.Text = string.Empty;
             pictureBox1.Image = null;
             pictureBox1.Refresh();
 
@@ -66,6 +64,7 @@ namespace ClassifyBear
                     }
                 }
 
+                // 设置要加载的模型的路径，跟据需要改为你的模型名称
                 string modelPath = AppDomain.CurrentDomain.BaseDirectory + "BearModel.onnx";
 
                 using (var session = new InferenceSession(modelPath))
@@ -90,9 +89,15 @@ namespace ClassifyBear
                         .FirstOrDefault(); // 支持多张图片同时推理，这里只推理了一张，取第一个结果值
 
                     // 显示在控件中
-                    label1.Text = label;
+                    label2.Text = label;
                 }
             }
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
